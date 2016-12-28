@@ -6,7 +6,7 @@
 discussions or the answerings of questions. If wanted each thread
 can have a collaborated result which is developed during the 
 conversation. Only invited users can participate but conversations
-may be open to read. 
+may be opened to everyone for reading and optionally for voting too. 
 
 Content, tags, and votings for conversations are analyzed in the
 background. The results are used individually for each user to
@@ -19,7 +19,7 @@ I hope you like it. ;)
 
 ## Version
 
-Version 1.0.0-alpha.2016-12-26
+Version 1.0.0-alpha.2016-12-28
 
 ## Contributors
 
