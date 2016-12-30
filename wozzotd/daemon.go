@@ -19,6 +19,8 @@ import (
 	"github.com/tideland/golib/logger"
 	"github.com/tideland/gorest/rest"
 	"github.com/tideland/wozzot/core"
+
+	"github.com/tideland/wozzot/handlers"
 )
 
 //--------------------
@@ -60,6 +62,9 @@ func NewDaemon(ctx context.Context, server ServerFunc) (Daemon, error) {
 	if err := d.initMultiplexer(); err != nil {
 		return nil, err
 	}
+	if err := d.initHandlers(); err != nil {
+		return nil, err
+	}
 	return d, nil
 }
 
@@ -93,6 +98,19 @@ func (d *daemon) initMultiplexer() error {
 	}
 	d.mux = rest.NewMultiplexer(d.ctx, cfg)
 	return nil
+}
+
+// initHandlers starts and registers the different
+// different web handlers.
+func (d *daemon) initHandlers() error {
+	register := func(err error, domain, resource string, handler rest.ResourceHandler) error {
+		if err != nil {
+			return err
+		}
+		return d.mux.Register(domain, resource, handler)
+	}
+	err := register(nil, "system", "information", handlers.NewSysInfoHandler(d.ctx))
+	return err
 }
 
 // EOF

@@ -21,7 +21,7 @@ import (
 
 // Version returns the version of the software.
 func Version() version.Version {
-	return version.New(1, 0, 0, "alpha", "2016-12-29")
+	return version.New(1, 0, 0, "alpha", "2016-12-30")
 }
 
 // EOF
