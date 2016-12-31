@@ -19,7 +19,7 @@ I hope you like it. ;)
 
 ## Version
 
-Version 1.0.0-alpha.2016-12-28
+Version 1.0.0-alpha.2016-12-31
 
 ## Contributors
 

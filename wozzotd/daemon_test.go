@@ -32,7 +32,6 @@ func TestNewDaemon(t *testing.T) {
 	server := func(sctx context.Context, h http.Handler) error {
 		return nil
 	}
-
 	d, err := NewDaemon(ctx, server)
 	assert.NotNil(d)
 	assert.Nil(err)
