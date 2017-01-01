@@ -1,6 +1,6 @@
 // Tideland Wozzot - Core - Version
 //
-// Copyright (C) 2016 Frank Mueller / Tideland / Oldenburg / Germany
+// Copyright (C) 2016-2017 Frank Mueller / Tideland / Oldenburg / Germany
 //
 // All rights reserved. Use of this source code is governed
 // by the new BSD license.
@@ -21,7 +21,7 @@ import (
 
 // Version returns the version of the software.
 func Version() version.Version {
-	return version.New(1, 0, 0, "alpha", "2016-12-31")
+	return version.New(1, 0, 0, "alpha", "2017-01-01")
 }
 
 // EOF
