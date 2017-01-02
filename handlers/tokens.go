@@ -12,6 +12,7 @@ package handlers
 //--------------------
 
 import (
+	"context"
 	"time"
 
 	"github.com/tideland/golib/logger"
@@ -30,7 +31,7 @@ type tokensHandler struct{}
 // NewTokensHandler creates a new handler responsible
 // for the verification of logins and creation of JSON
 // Web Tokens used during a session.
-func NewTokensHandler() rest.ResourceHandler {
+func NewTokensHandler(ctx context.Context) rest.ResourceHandler {
 	return &tokensHandler{}
 }
 

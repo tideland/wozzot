@@ -34,8 +34,8 @@ type sysinfo struct {
 type sysinfoHandler struct {
 }
 
-// NewSysInfoHandler creates a new system information handler.
-func NewSysInfoHandler(ctx context.Context) rest.ResourceHandler {
+// NewInformationsHandler creates a new system information handler.
+func NewInformationsHandler(ctx context.Context) rest.ResourceHandler {
 	return &sysinfoHandler{}
 }
 

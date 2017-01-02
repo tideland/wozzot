@@ -109,7 +109,8 @@ func (d *daemon) initHandlers() error {
 		}
 		return d.mux.Register(domain, resource, handler)
 	}
-	err := register(nil, "system", "information", handlers.NewSysInfoHandler(d.ctx))
+	err := register(nil, "system", "informations", handlers.NewInformationsHandler(d.ctx))
+	err = register(err, "authentication", "tokens", handlers.NewTokensHandler(d.ctx))
 	return err
 }
 
