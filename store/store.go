@@ -1,27 +1,29 @@
-// Tideland Wozzot - Core - Version
+// Tideland Wozzot - Store
 //
 // Copyright (C) 2016-2017 Frank Mueller / Tideland / Oldenburg / Germany
 //
 // All rights reserved. Use of this source code is governed
 // by the new BSD license.
 
-package core
+package store
 
 //--------------------
 // IMPORTS
 //--------------------
 
 import (
-	"github.com/tideland/golib/version"
+	"context"
 )
 
 //--------------------
-// VERSION
+// STORE
 //--------------------
 
-// Version returns the version of the software.
-func Version() version.Version {
-	return version.New(1, 0, 0, "alpha", "2017-02-08")
+// Store describes the persistency methods of Wozzot
+// used by the different handlers. 
+type Store interface {
+	// ReadDocument returns the document with the given ID.
+	ReadDocument(id string) (Document, error)
 }
 
 // EOF
