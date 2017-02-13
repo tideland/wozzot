@@ -12,18 +12,17 @@ package store
 //--------------------
 
 import (
-	"context"
+	"github.com/tideland/wozzot/model"
 )
 
 //--------------------
 // STORE
 //--------------------
 
-// Store describes the persistency methods of Wozzot
-// used by the different handlers. 
+// Store describes the access to the document base.
 type Store interface {
 	// ReadDocument returns the document with the given ID.
-	ReadDocument(id string) (Document, error)
+	ReadDocument(id string) (model.Document, error)
 }
 
 // EOF

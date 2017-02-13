@@ -1,6 +1,6 @@
 // Tideland Wozzot - Daemon
 //
-// Copyright (C) 2016 Frank Mueller / Tideland / Oldenburg / Germany
+// Copyright (C) 2016-2017 Frank Mueller / Tideland / Oldenburg / Germany
 //
 // All rights reserved. Use of this source code is governed
 // by the new BSD license.
@@ -103,14 +103,16 @@ func (d *daemon) initMultiplexer() error {
 // initHandlers starts and registers the different
 // different web handlers.
 func (d *daemon) initHandlers() error {
+	// Helper to stop registering handlers after the
+	// first error.
 	register := func(err error, domain, resource string, handler rest.ResourceHandler) error {
 		if err != nil {
 			return err
 		}
 		return d.mux.Register(domain, resource, handler)
 	}
+	// Now register the handlers.
 	err := register(nil, "system", "informations", handlers.NewInformationsHandler(d.ctx))
-	err = register(err, "authentication", "tokens", handlers.NewTokensHandler(d.ctx))
 	return err
 }
 
