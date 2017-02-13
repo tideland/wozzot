@@ -22,8 +22,8 @@ import (
 // Factory describes a type managing the different
 // Wozzot services.
 type Factory interface {
-	// Authentication returns the authentication service.
-	Authentication() Authentication
+	// Fetchee returns the fetcher service.
+	Fetcher() Fetcher
 }
 
 //--------------------

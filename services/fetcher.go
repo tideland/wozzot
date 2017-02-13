@@ -1,4 +1,4 @@
-// Tideland Wozzot - Fetcher
+// Tideland Wozzot - Services - Fetcher
 //
 // Copyright (C) 2016-2017 Frank Mueller / Tideland / Oldenburg / Germany
 //
@@ -15,7 +15,7 @@ package fetcher
 // FETCHER
 //--------------------
 
-// Fetcher describes the background service to fetch the
+// Fetcher provides the functionality to fetch the
 // content periodically.
 type Fetcher interface {
 }
