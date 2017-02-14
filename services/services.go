@@ -16,13 +16,31 @@ import (
 )
 
 //--------------------
-// FACTORY
+// SERVICE
 //--------------------
 
-// Factory describes a type managing the different
+// Service describes the interface each service has
+// ro implement.
+type Service interface {
+	// Init tells a service to startup providing needed
+	// information in a context.
+	Init(ctx context.Context) error
+
+	// Stop terminates the service.
+	Stop() error
+}
+
+//--------------------
+// PROVIDER
+//--------------------
+
+// Provider describes a type managing the different
 // Wozzot services.
-type Factory interface {
-	// Fetchee returns the fetcher service.
+type Provider interface {
+	// Loader returns the loader service.
+	Loader() Loader
+
+	// Fetcher returns the fetcher service.
 	Fetcher() Fetcher
 }
 
@@ -33,16 +51,17 @@ type Factory interface {
 // contextKey is used to address data inside a context.
 type contextKey int
 
-// factoryKey is the context key for the service factory.
-const factoryKey contextKey = 0
+// providerKey is the context key for the service provider.
+const providerKey contextKey = 0
 
-// newContext creates a new context containing a factory.
-func newContext(ctx context.Context, factory Factory) context.Context {
-	return context.WithValue(ctx, factoryKey, factory)
+// NewContext creates a new context containing a
+// service provider.
+func NewContext(ctx context.Context, provider Provider) context.Context {
+	return context.WithValue(ctx, providerKey, provider)
 }
 
-// FromContext retrieves the factory out of a context.
-func FromContext(ctx context.Context) (Factory, bool) {
+// FromContext retrieves the provider out of a context.
+func FromContext(ctx context.Context) (Provider, bool) {
 	return nil, false
 }
 

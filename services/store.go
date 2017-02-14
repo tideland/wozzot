@@ -1,11 +1,11 @@
-// Tideland Wozzot - Store
+// Tideland Wozzot - Services - Store
 //
 // Copyright (C) 2016-2017 Frank Mueller / Tideland / Oldenburg / Germany
 //
 // All rights reserved. Use of this source code is governed
 // by the new BSD license.
 
-package store
+package services
 
 //--------------------
 // IMPORTS
@@ -16,11 +16,11 @@ import (
 )
 
 //--------------------
-// STORE
+// LOADER
 //--------------------
 
-// Store describes the access to the document base.
-type Store interface {
+// Loader provides access to the document base.
+type Loader interface {
 	// ReadDocument returns the document with the given ID.
 	ReadDocument(id string) (model.Document, error)
 }
