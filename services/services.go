@@ -42,6 +42,9 @@ type Provider interface {
 
 	// Fetcher returns the fetcher service.
 	Fetcher() Fetcher
+	
+	// Renderer returns the renderer service. 
+	Renderer() Renderer
 }
 
 //--------------------
