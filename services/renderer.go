@@ -21,12 +21,14 @@ import (
 
 // Renderer provides rendering of a document with a template.
 type Renderer interface {
+	Service
+
 	// Render renders a document with an internally defined
 	// template, otherwise with a default template.
 	Render(doc model.Document) (model.Page, error)
-	
+
 	// RenderTemplate renders a document with a given template,
-	// regardles of an internally defined template. 
+	// regardles of an internally defined template.
 	RenderTemplate(doc model.Document, tmpl model.Template) (model.Page, error)
 }
 

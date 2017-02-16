@@ -1,4 +1,4 @@
-// Tideland Wozzot - Model - Document
+// Tideland Wozzot - Model - Template
 //
 // Copyright (C) 2016-2017 Frank Mueller / Tideland / Oldenburg / Germany
 //
@@ -8,13 +8,12 @@
 package model
 
 //--------------------
-// DOCUMENT
+// TEMPLATE
 //--------------------
 
-// Document describes a standard single page document.
-type Document struct {
-	ID    string
-	Title string
+// Template describes a template for rendering
+// documents into pages.
+type Template struct {
 }
 
 // EOF

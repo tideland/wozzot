@@ -18,6 +18,7 @@ package services
 // Fetcher provides the functionality to fetch the
 // content periodically.
 type Fetcher interface {
+	Service
 }
 
 // EOF

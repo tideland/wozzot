@@ -13,6 +13,8 @@ package services
 
 import (
 	"context"
+
+	"github.com/tideland/golib/version"
 )
 
 //--------------------
@@ -25,6 +27,9 @@ type Service interface {
 	// Init tells a service to startup providing needed
 	// information in a context.
 	Init(ctx context.Context) error
+
+	// Info returns the service name and it's version.
+	Info() (string, version.Version)
 
 	// Stop terminates the service.
 	Stop() error
@@ -42,8 +47,8 @@ type Provider interface {
 
 	// Fetcher returns the fetcher service.
 	Fetcher() Fetcher
-	
-	// Renderer returns the renderer service. 
+
+	// Renderer returns the renderer service.
 	Renderer() Renderer
 }
 
