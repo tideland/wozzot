@@ -14,7 +14,11 @@ package services
 import (
 	"context"
 
+	"github.com/tideland/golib/errors"
+	"github.com/tideland/golib/logger"
 	"github.com/tideland/golib/version"
+
+	"github.com/tideland/wozzot/model"
 )
 
 //--------------------
@@ -43,13 +47,35 @@ type Service interface {
 // Wozzot services.
 type Provider interface {
 	// Loader returns the loader service.
-	Loader() Loader
+	Loader() (Loader, error)
 
 	// Fetcher returns the fetcher service.
-	Fetcher() Fetcher
+	Fetcher() (Fetcher, error)
 
 	// Renderer returns the renderer service.
-	Renderer() Renderer
+	Renderer(format model.Format) (Renderer, error)
+}
+
+// provider implements Provider.
+type provider struct {
+	ctx    context.Context
+	loader Loader
+}
+
+// Loader implements the Provider interface.
+func (p *provider) Loader() (Loader, error) {
+	if p.loader == nil {
+		p.loader = newStubLoader()
+		err := p.loader.Init(p.ctx)
+		if err != nil {
+			p.loader = nil
+			return nil, errors.Annotate(err, ErrStartingService, errorMessages)
+
+		}
+		info, ver := p.loader.Info()
+		logger.Infof("started service %s version %v", info, ver)
+	}
+	return p.loader, nil
 }
 
 //--------------------

@@ -8,13 +8,30 @@
 package model
 
 //--------------------
+// FORMAT
+//--------------------
+
+// Format describes the content format of a document.
+type Format int
+
+// Supported document formats.
+const (
+	FormatText Format = iota + 1
+	FormatMarkdown
+	FormatSML
+)
+
+//--------------------
 // DOCUMENT
 //--------------------
 
-// Document describes a standard single page document.
+// Document describes a single document.
 type Document struct {
-	ID    string
-	Title string
+	ID      string
+	Format  Format
+	Tags    []string
+	Title   string
+	Content string
 }
 
 // EOF

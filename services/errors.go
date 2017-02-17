@@ -21,14 +21,16 @@ import (
 
 // Error codes.
 const (
-	ErrDoesNotExist = iota + 1
+	ErrStartingService = iota + 1
+	ErrDoesNotExist
 	ErrCannotLoad
 )
 
 // Error messages.
 var errorMessages = errors.Messages{
-	ErrDoesNotExist: "document '%s' does not exist",
-	ErrCannotLoad:   "cannot load document: %v",
+	ErrStartingService: "cannot starting service '%s'",
+	ErrDoesNotExist:    "document '%s' does not exist",
+	ErrCannotLoad:      "cannot load document",
 }
 
 // EOF

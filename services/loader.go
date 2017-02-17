@@ -54,7 +54,7 @@ func (l *stubLoader) Init(ctx context.Context) error {
 
 // Info implements the Service interface.
 func (l *stubLoader) Info() (string, version.Version) {
-	return "Stub Loader", version.New(0, 1, 0)
+	return "Stub Loader", version.New(0, 2, 0)
 }
 
 // Stop implements the Service interface.
@@ -71,7 +71,13 @@ func (l *stubLoader) ReadDocument(id string) (model.Document, error) {
 		err := fmt.Errorf("ouch")
 		return model.Document{}, errors.New(ErrCannotLoad, errorMessages, err)
 	default:
-		return model.Document{}, nil
+		return model.Document{
+			ID:      id,
+			Format:  model.FormatText,
+			Tags:    []string{"test", "foo", "bar"},
+			Title:   "Test document by stub loader",
+			Content: "The quick brown fox jumps over the lazy dog.",
+		}, nil
 	}
 }
 
