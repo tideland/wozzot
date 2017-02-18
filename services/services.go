@@ -46,11 +46,11 @@ type Service interface {
 // Provider describes a type managing the different
 // Wozzot services.
 type Provider interface {
-	// Loader returns the loader service.
-	Loader() (Loader, error)
-
 	// Fetcher returns the fetcher service.
 	Fetcher() (Fetcher, error)
+
+	// Loader returns the loader service.
+	Loader() (Loader, error)
 
 	// Renderer returns the renderer service.
 	Renderer(format model.Format) (Renderer, error)
@@ -60,6 +60,18 @@ type Provider interface {
 type provider struct {
 	ctx    context.Context
 	loader Loader
+}
+
+// NewProvider returns a new provider.
+func NewProvider(ctx context.Context) Provider {
+	return &provider{
+		ctx: ctx,
+	}
+}
+
+// Fetcher implements the Provider interface.
+func (p *provider) Fetcher() (Fetcher, error) {
+	return nil, nil
 }
 
 // Loader implements the Provider interface.
@@ -76,6 +88,11 @@ func (p *provider) Loader() (Loader, error) {
 		logger.Infof("started service %s version %v", info, ver)
 	}
 	return p.loader, nil
+}
+
+// Renderer implements the Provider interface.
+func (p *provider) Renderer(format model.Format) (Renderer, error) {
+	return nil, nil
 }
 
 //--------------------

@@ -54,7 +54,7 @@ func (l *stubLoader) Init(ctx context.Context) error {
 
 // Info implements the Service interface.
 func (l *stubLoader) Info() (string, version.Version) {
-	return "Stub Loader", version.New(0, 2, 0)
+	return "Stub Loader", version.New(0, 3, 0)
 }
 
 // Stop implements the Service interface.
@@ -70,12 +70,28 @@ func (l *stubLoader) ReadDocument(id string) (model.Document, error) {
 	case "fail-during-load":
 		err := fmt.Errorf("ouch")
 		return model.Document{}, errors.New(ErrCannotLoad, errorMessages, err)
+	case "markdown-document":
+		return model.Document{
+			ID:      id,
+			Format:  model.FormatMarkdown,
+			Tags:    []string{"test", "foo", "bar"},
+			Title:   "MArkdown document by stub loader",
+			Content: "The quick brown **fox** jumps over the lazy dog.",
+		}, nil
+	case "sml-document":
+		return model.Document{
+			ID:      id,
+			Format:  model.FormatSML,
+			Tags:    []string{"test", "foo", "bar"},
+			Title:   "SML document by stub loader",
+			Content: "{p The quick brown {b fox} jumps over the lazy dog.}",
+		}, nil
 	default:
 		return model.Document{
 			ID:      id,
 			Format:  model.FormatText,
 			Tags:    []string{"test", "foo", "bar"},
-			Title:   "Test document by stub loader",
+			Title:   "Text document by stub loader",
 			Content: "The quick brown fox jumps over the lazy dog.",
 		}, nil
 	}
