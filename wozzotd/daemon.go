@@ -19,6 +19,7 @@ import (
 	"github.com/tideland/golib/logger"
 	"github.com/tideland/gorest/rest"
 	"github.com/tideland/wozzot/core"
+	"github.com/tideland/wozzot/services"
 
 	"github.com/tideland/wozzot/handlers"
 )
@@ -42,10 +43,11 @@ type Daemon interface {
 
 // daemon implements the Daemon interface.
 type daemon struct {
-	ctx    context.Context
-	cfg    etc.Etc
-	mux    rest.Multiplexer
-	server ServerFunc
+	ctx      context.Context
+	cfg      etc.Etc
+	provider services.Provider
+	mux      rest.Multiplexer
+	server   ServerFunc
 }
 
 // NewDaemon creates a new daemon and prepares the services.
@@ -60,6 +62,9 @@ func NewDaemon(ctx context.Context, server ServerFunc) (Daemon, error) {
 		return nil, err
 	}
 	if err := d.initMultiplexer(); err != nil {
+		return nil, err
+	}
+	if err := d.initServices(); err != nil {
 		return nil, err
 	}
 	if err := d.initHandlers(); err != nil {
@@ -97,6 +102,17 @@ func (d *daemon) initMultiplexer() error {
 		return err
 	}
 	d.mux = rest.NewMultiplexer(d.ctx, cfg)
+	return nil
+}
+
+// initServices starts the service provider in
+// the given context.
+func (d *daemon) initServices() error {
+	provider, err := services.NewProvider(d.ctx)
+	if err != nil {
+		return err
+	}
+	d.provider = provider
 	return nil
 }
 

@@ -63,10 +63,11 @@ type provider struct {
 }
 
 // NewProvider returns a new provider.
-func NewProvider(ctx context.Context) Provider {
-	return &provider{
-		ctx: ctx,
-	}
+func NewProvider(ctx context.Context) (Provider, error) {
+	logger.Infof("starting service provider ...")
+	p := &provider{}
+	p.ctx = NewContext(ctx, p)
+	return p, nil
 }
 
 // Fetcher implements the Provider interface.
