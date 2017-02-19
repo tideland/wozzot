@@ -12,10 +12,10 @@ package services
 //--------------------
 
 import (
-	"context"
 	"fmt"
 
 	"github.com/tideland/golib/errors"
+	"github.com/tideland/golib/etc"
 	"github.com/tideland/golib/version"
 	"github.com/tideland/wozzot/model"
 )
@@ -38,7 +38,8 @@ type Loader interface {
 
 // stubLoader simulates a loadeer for tests.
 type stubLoader struct {
-	ctx context.Context
+	cfg      etc.Etc
+	provider Provider
 }
 
 // newStubLoader creates a new stub loader.
@@ -47,14 +48,15 @@ func newStubLoader() Loader {
 }
 
 // Init implements the Service interface.
-func (l *stubLoader) Init(ctx context.Context) error {
-	l.ctx = ctx
+func (l *stubLoader) Init(cfg etc.Etc, p Provider) error {
+	l.cfg = cfg
+	l.provider = p
 	return nil
 }
 
 // Info implements the Service interface.
 func (l *stubLoader) Info() (string, version.Version) {
-	return "Stub Loader", version.New(0, 3, 0)
+	return "Stub Loader", version.New(0, 4, 0)
 }
 
 // Stop implements the Service interface.

@@ -108,7 +108,11 @@ func (d *daemon) initMultiplexer() error {
 // initServices starts the service provider in
 // the given context.
 func (d *daemon) initServices() error {
-	provider, err := services.NewProvider(d.ctx)
+	cfg, err := d.cfg.Split("services")
+	if err != nil {
+		return err
+	}
+	provider, err := services.NewProvider(cfg)
 	if err != nil {
 		return err
 	}

@@ -12,9 +12,8 @@ package services
 //--------------------
 
 import (
-	"context"
-
 	"github.com/tideland/golib/errors"
+	"github.com/tideland/golib/etc"
 	"github.com/tideland/golib/logger"
 	"github.com/tideland/golib/version"
 
@@ -30,7 +29,7 @@ import (
 type Service interface {
 	// Init tells a service to startup providing needed
 	// information in a context.
-	Init(ctx context.Context) error
+	Init(cfg etc.Etc, p Provider) error
 
 	// Info returns the service name and it's version.
 	Info() (string, version.Version)
@@ -58,15 +57,16 @@ type Provider interface {
 
 // provider implements Provider.
 type provider struct {
-	ctx    context.Context
+	cfg    etc.Etc
 	loader Loader
 }
 
 // NewProvider returns a new provider.
-func NewProvider(ctx context.Context) (Provider, error) {
+func NewProvider(cfg etc.Etc) (Provider, error) {
 	logger.Infof("starting the service provider ...")
-	p := &provider{}
-	p.ctx = NewContext(ctx, p)
+	p := &provider{
+		cfg: cfg,
+	}
 	return p, nil
 }
 
@@ -79,7 +79,7 @@ func (p *provider) Fetcher() (Fetcher, error) {
 func (p *provider) Loader() (Loader, error) {
 	if p.loader == nil {
 		p.loader = newStubLoader()
-		err := p.loader.Init(p.ctx)
+		err := p.loader.Init(p.cfg, p)
 		if err != nil {
 			p.loader = nil
 			return nil, errors.Annotate(err, ErrStartingService, errorMessages)
@@ -94,27 +94,6 @@ func (p *provider) Loader() (Loader, error) {
 // Renderer implements the Provider interface.
 func (p *provider) Renderer(format model.Format) (Renderer, error) {
 	return nil, nil
-}
-
-//--------------------
-//  CONTEXT
-//--------------------
-
-// contextKey is used to address data inside a context.
-type contextKey int
-
-// providerKey is the context key for the service provider.
-const providerKey contextKey = 0
-
-// NewContext creates a new context containing a
-// service provider.
-func NewContext(ctx context.Context, provider Provider) context.Context {
-	return context.WithValue(ctx, providerKey, provider)
-}
-
-// FromContext retrieves the provider out of a context.
-func FromContext(ctx context.Context) (Provider, bool) {
-	return nil, false
 }
 
 // EOF
