@@ -1,6 +1,6 @@
 // Tideland Wozzot - Daemon
 //
-// Copyright (C) 2016 Frank Mueller / Tideland / Oldenburg / Germany
+// Copyright (C) 2016-2017 Frank Mueller / Tideland / Oldenburg / Germany
 //
 // All rights reserved. Use of this source code is governed
 // by the new BSD license.
@@ -19,6 +19,7 @@ import (
 	"github.com/tideland/golib/logger"
 	"github.com/tideland/gorest/rest"
 	"github.com/tideland/wozzot/core"
+	"github.com/tideland/wozzot/services"
 
 	"github.com/tideland/wozzot/handlers"
 )
@@ -42,10 +43,11 @@ type Daemon interface {
 
 // daemon implements the Daemon interface.
 type daemon struct {
-	ctx    context.Context
-	cfg    etc.Etc
-	mux    rest.Multiplexer
-	server ServerFunc
+	ctx      context.Context
+	cfg      etc.Etc
+	provider services.Provider
+	mux      rest.Multiplexer
+	server   ServerFunc
 }
 
 // NewDaemon creates a new daemon and prepares the services.
@@ -60,6 +62,9 @@ func NewDaemon(ctx context.Context, server ServerFunc) (Daemon, error) {
 		return nil, err
 	}
 	if err := d.initMultiplexer(); err != nil {
+		return nil, err
+	}
+	if err := d.initServices(); err != nil {
 		return nil, err
 	}
 	if err := d.initHandlers(); err != nil {
@@ -100,17 +105,34 @@ func (d *daemon) initMultiplexer() error {
 	return nil
 }
 
+// initServices starts the service provider in
+// the given context.
+func (d *daemon) initServices() error {
+	cfg, err := d.cfg.Split("services")
+	if err != nil {
+		return err
+	}
+	provider, err := services.NewProvider(cfg)
+	if err != nil {
+		return err
+	}
+	d.provider = provider
+	return nil
+}
+
 // initHandlers starts and registers the different
 // different web handlers.
 func (d *daemon) initHandlers() error {
+	// Helper to stop registering handlers after the
+	// first error.
 	register := func(err error, domain, resource string, handler rest.ResourceHandler) error {
 		if err != nil {
 			return err
 		}
 		return d.mux.Register(domain, resource, handler)
 	}
+	// Now register the handlers.
 	err := register(nil, "system", "informations", handlers.NewInformationsHandler(d.ctx))
-	err = register(err, "authentication", "tokens", handlers.NewTokensHandler(d.ctx))
 	return err
 }
 

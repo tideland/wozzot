@@ -12,38 +12,88 @@ package services
 //--------------------
 
 import (
-	"context"
+	"github.com/tideland/golib/errors"
+	"github.com/tideland/golib/etc"
+	"github.com/tideland/golib/logger"
+	"github.com/tideland/golib/version"
+
+	"github.com/tideland/wozzot/model"
 )
 
 //--------------------
-// FACTORY
+// SERVICE
 //--------------------
 
-// Factory describes a type managing the different
+// Service describes the interface each service has
+// ro implement.
+type Service interface {
+	// Init tells a service to startup providing needed
+	// information in a context.
+	Init(cfg etc.Etc, p Provider) error
+
+	// Info returns the service name and it's version.
+	Info() (string, version.Version)
+
+	// Stop terminates the service.
+	Stop() error
+}
+
+//--------------------
+// PROVIDER
+//--------------------
+
+// Provider describes a type managing the different
 // Wozzot services.
-type Factory interface {
-	// Authentication returns the authentication service.
-	Authentication() Authentication
+type Provider interface {
+	// Fetcher returns the fetcher service.
+	Fetcher() (Fetcher, error)
+
+	// Loader returns the loader service.
+	Loader() (Loader, error)
+
+	// Renderer returns the renderer service.
+	Renderer(format model.Format) (Renderer, error)
 }
 
-//--------------------
-//  CONTEXT
-//--------------------
-
-// contextKey is used to address data inside a context.
-type contextKey int
-
-// factoryKey is the context key for the service factory.
-const factoryKey contextKey = 0
-
-// newContext creates a new context containing a factory.
-func newContext(ctx context.Context, factory Factory) context.Context {
-	return context.WithValue(ctx, factoryKey, factory)
+// provider implements Provider.
+type provider struct {
+	cfg    etc.Etc
+	loader Loader
 }
 
-// FromContext retrieves the factory out of a context.
-func FromContext(ctx context.Context) (Factory, bool) {
-	return nil, false
+// NewProvider returns a new provider.
+func NewProvider(cfg etc.Etc) (Provider, error) {
+	logger.Infof("starting the service provider ...")
+	p := &provider{
+		cfg: cfg,
+	}
+	return p, nil
+}
+
+// Fetcher implements the Provider interface.
+func (p *provider) Fetcher() (Fetcher, error) {
+	return nil, nil
+}
+
+// Loader implements the Provider interface.
+func (p *provider) Loader() (Loader, error) {
+	if p.loader == nil {
+		p.loader = newStubLoader()
+		err := p.loader.Init(p.cfg, p)
+		if err != nil {
+			p.loader = nil
+			return nil, errors.Annotate(err, ErrStartingService, errorMessages)
+
+		}
+		info, ver := p.loader.Info()
+		logger.Infof("started service %s version %v", info, ver)
+	}
+	return p.loader, nil
+}
+
+// Renderer implements the Provider interface.
+func (p *provider) Renderer(format model.Format) (Renderer, error) {
+	return nil, nil
 }
 
 // EOF

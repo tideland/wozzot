@@ -1,27 +1,24 @@
-// Tideland Wozzot - Core - Version
+// Tideland Wozzot - Services - Fetcher
 //
 // Copyright (C) 2016-2017 Frank Mueller / Tideland / Oldenburg / Germany
 //
 // All rights reserved. Use of this source code is governed
 // by the new BSD license.
 
-package core
+package services
 
 //--------------------
 // IMPORTS
 //--------------------
 
-import (
-	"github.com/tideland/golib/version"
-)
-
 //--------------------
-// VERSION
+// FETCHER
 //--------------------
 
-// Version returns the version of the software.
-func Version() version.Version {
-	return version.New(0, 7, 0)
+// Fetcher provides the functionality to fetch the
+// content periodically.
+type Fetcher interface {
+	Service
 }
 
 // EOF

@@ -1,11 +1,11 @@
-// Tideland Wozzot - Main - Daemon - Unit Tests
+// Tideland Wozzot - Services - Unit Tests
 //
 // Copyright (C) 2016-2017 Frank Mueller / Tideland / Oldenburg / Germany
 //
 // All rights reserved. Use of this source code is governed
 // by the new BSD license.
 
-package main
+package services_test
 
 //--------------------
 // IMPORTS
@@ -13,27 +13,26 @@ package main
 
 import (
 	"context"
-	"net/http"
 	"testing"
 
 	"github.com/tideland/golib/audit"
 	"github.com/tideland/golib/etc"
+
+	"github.com/tideland/wozzot/services"
 )
 
 //--------------------
 // TESTS
 //--------------------
 
-// TestNewDaeomon tests the publinda daemon initialization.
+// TestProvider tests starting the provider.
 func TestNewDaemon(t *testing.T) {
 	assert := audit.NewTestingAssertion(t, true)
 	cfgStr := "{etc}"
 	ctx := prepareTestContext(assert, cfgStr)
-	server := func(sctx context.Context, h http.Handler) error {
-		return nil
-	}
-	d, err := NewDaemon(ctx, server)
-	assert.NotNil(d)
+
+	p, err := services.NewProvider(ctx)
+	assert.NotNil(p)
 	assert.Nil(err)
 }
 
